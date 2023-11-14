@@ -11,3 +11,5 @@ const exampleData = [
     { name: "Player 9", preferences: ["Tank", "DPS", "Support"] },
     { name: "Player 10", preferences: ["DPS", "Support"] },
   ];
+
+exports.exampleData = exampleData;

@@ -1,3 +1,5 @@
+
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -5,7 +7,7 @@ function shuffleArray(array) {
     }
 }
 
-export function createTeam(players) {
+function createTeam(players) {
     const tanks = [];
     const dps = [];
     const support = [];
@@ -58,3 +60,5 @@ export function createTeam(players) {
         return createTeam(players);
     }
 }
+
+exports.createTeam = createTeam;

@@ -1,5 +1,6 @@
-const { SlashCommandBuilder } = require('discord.js');
-import { createTeam } from '../../logic';
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { createTeam } = require('../../logic');
+const { exampleData } = require('../../common');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -92,7 +93,7 @@ module.exports = {
         message.react(emojis[2]);
 
         const filter = (reaction, user) => emojis.includes(reaction.emoji.name) && players.includes(user);
-        const collector = message.createReactionCollector({ filter, time: 30000 });
+        const collector = message.createReactionCollector({ filter, time: 10000 });
 
         const data = [];
 
@@ -102,7 +103,7 @@ module.exports = {
             console.log(`Collected reaction ${reaction.emoji.name} from user ${user.tag}`);
 
             const role = roleOptions[emojis.indexOf(reaction.emoji.name)];
-            const userTag = `<@${user.tag}>`;
+            const userTag = `${user.tag}`;
 
             const existingPlayerIndex = data.findIndex(player => player.name === userTag);
 
@@ -135,12 +136,31 @@ module.exports = {
             // Process collected reactions and selected roles
             console.log(data);
 
-            const teams = createTeam(data);
+            const teams = createTeam(exampleData);
+
+            console.log(teams);
 
             const teamA = teams[0];
             const teamB = teams[1];
-            
+
+            const embedTeams = new EmbedBuilder()
+                .setColor('Orange')
+                .setTitle('Tournament Teams')
+                .addFields(
+                    { name: 'Team A', value: '\u200B'},
+                    { name: '🛡️ Tank', value: teamA[0].name, inline: false},
+                    { name: '🔫 DPS', value: `${teamA[1].name}, ${teamA[2].name}`, inline: false},
+                    { name: '💉 Support ', value: `${teamA[3].name}, ${teamA[4].name}`, inline: false},
+                    { name: '\u200B', value: '\u200B'},
+                    { name: 'Team B', value: '\u200B'},
+                    { name: '🛡️ Tank', value: teamB[0].name, inline: false},
+                    { name: '🔫 DPS', value: `${teamB[1].name}, ${teamB[2].name}`, inline: false},
+                    { name: '💉 Support ', value: `${teamB[3].name}, ${teamB[4].name}`, inline: false},
+                )
+                .setFooter({text: 'stupid bot by Goob'})
+
             // Further processing based on selected roles
             interaction.followUp('Role selection completed!');
+            interaction.followUp({ embeds: [embedTeams]});
         })
     }};
