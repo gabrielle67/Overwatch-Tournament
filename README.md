@@ -1,2 +1,3 @@
 # Role-Select
-A clone of Overwatch's Role Select page and matchmaking system for a group of 10 players
+
+Discord bot that takes 10 users and preferred roles and divides them into 2 equal teams.
