@@ -1,11 +1,12 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { createTeam } = require('../../logic');
-const { exampleData } = require('../../common');
+const { createTeamEmbed, insufficientTeamEmbed } = require('../../components/embed')
+const { exampleData, emojis, roleOptions, createTeamMessage, createTeamDescription } = require('../../constants');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('createteam')
-        .setDescription("Takes role preferences of 10 players and creates 2 teams of 5 with 1 Tank, 2 DPS, and 2 Supports")
+        .setDescription(createTeamDescription)
         .addUserOption(option => option
             .setName('player1')
             .setDescription('Player 1')
@@ -58,33 +59,20 @@ module.exports = {
         ),
 
     async execute(interaction) {
-        const players = [
-            interaction.options.getUser('player1'),
-            interaction.options.getUser('player2'),
-            interaction.options.getUser('player3'),
-            interaction.options.getUser('player4'),
-            interaction.options.getUser('player5'),
-            interaction.options.getUser('player6'),
-            interaction.options.getUser('player7'),
-            interaction.options.getUser('player8'),
-            interaction.options.getUser('player9'),
-            interaction.options.getUser('player10')
-        ];
 
-        const roleOptions = [
-            'Tank',
-            'DPS',
-            'Support',
-        ];
-
-        const emojis = [
-            '🛡️',
-            '🔫',
-            '💉'
-        ];
+        // Retrieve players from command
+        const players = [];
+        let playerString = "";
+        for (let i = 1; i <= 10; i++){
+            const player = interaction.options.getUser(`player${i}`);
+            if (player) {
+                players.push(player);
+                playerString += `<@${player.id}> `;
+            }
+        }
 
         const message = await interaction.reply({
-            content: "React to this message to select your roles within the next 30 seconds.\n\n🛡️ Tank\n🔫 DPS\n💉 Support",
+            content: `${playerString}\n\n ${createTeamMessage}`,
             fetchReply: true
         })
 
@@ -93,17 +81,15 @@ module.exports = {
         message.react(emojis[2]);
 
         const filter = (reaction, user) => emojis.includes(reaction.emoji.name) && players.includes(user);
-        const collector = message.createReactionCollector({ filter, time: 10000 });
+        const collector = message.createReactionCollector({ filter, time: 30000 });
 
         const data = [];
-
-        console.log('starting collection');
 
         collector.on('collect', (reaction, user) => {
             console.log(`Collected reaction ${reaction.emoji.name} from user ${user.tag}`);
 
             const role = roleOptions[emojis.indexOf(reaction.emoji.name)];
-            const userTag = `${user.tag}`;
+            const userTag = `<@${user.id}>`;
 
             const existingPlayerIndex = data.findIndex(player => player.name === userTag);
 
@@ -136,31 +122,16 @@ module.exports = {
             // Process collected reactions and selected roles
             console.log(data);
 
-            const teams = createTeam(exampleData);
+            interaction.followUp('Role selection time is up!');
 
-            console.log(teams);
-
-            const teamA = teams[0];
-            const teamB = teams[1];
-
-            const embedTeams = new EmbedBuilder()
-                .setColor('Orange')
-                .setTitle('Tournament Teams')
-                .addFields(
-                    { name: 'Team A', value: '\u200B'},
-                    { name: '🛡️ Tank', value: teamA[0].name, inline: false},
-                    { name: '🔫 DPS', value: `${teamA[1].name}, ${teamA[2].name}`, inline: false},
-                    { name: '💉 Support ', value: `${teamA[3].name}, ${teamA[4].name}`, inline: false},
-                    { name: '\u200B', value: '\u200B'},
-                    { name: 'Team B', value: '\u200B'},
-                    { name: '🛡️ Tank', value: teamB[0].name, inline: false},
-                    { name: '🔫 DPS', value: `${teamB[1].name}, ${teamB[2].name}`, inline: false},
-                    { name: '💉 Support ', value: `${teamB[3].name}, ${teamB[4].name}`, inline: false},
-                )
-                .setFooter({text: 'stupid bot by Goob'})
-
-            // Further processing based on selected roles
-            interaction.followUp('Role selection completed!');
-            interaction.followUp({ embeds: [embedTeams]});
+            if (data.length < 10) {
+                const insufficientTeam = insufficientTeamEmbed()
+                interaction.followUp({ embeds: [insufficientTeam] })
+            } else {
+                const teams = createTeam(data);
+                const embedTeams = createTeamEmbed(teams[0], teams[1]);
+                interaction.followUp({ embeds: [embedTeams] })
+            }
         })
-    }};
+    }
+};

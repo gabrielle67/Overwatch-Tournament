@@ -13,8 +13,6 @@ const client = new Client({
 	] 
 });
 
-
-
 // get commands
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');

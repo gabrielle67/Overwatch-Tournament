@@ -1,4 +1,6 @@
-
+// 
+// takes a list of ten maps with user preferences and divides them into 2 equal teams
+//
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -40,13 +42,13 @@ function createTeam(players) {
             if (player.preferences.includes("Tank") && tanks.length < 2) {
                 tanks.push(player);
                 player.role = "Tank";
-                } else if (player.preferences.includes("DPS") && dps.length < 4) {
+            } else if (player.preferences.includes("DPS") && dps.length < 4) {
                 dps.push(player);
                 player.role = "DPS";
-                } else if (player.preferences.includes("Support") && support.length < 4) {
+            } else if (player.preferences.includes("Support") && support.length < 4) {
                 support.push(player);
                 player.role = "Support";
-                }
+            }
         }
     }
 
