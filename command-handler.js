@@ -48,4 +48,3 @@ for (const file of eventFiles) {
 
 // login 
 client.login(process.env.TOKEN);
-;

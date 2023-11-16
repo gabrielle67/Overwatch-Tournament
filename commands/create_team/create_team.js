@@ -1,7 +1,11 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { createTeam } = require('../../logic');
-const { createTeamEmbed, insufficientTeamEmbed } = require('../../components/embed')
-const { exampleData, emojis, roleOptions, createTeamMessage, createTeamDescription } = require('../../constants');
+//
+// create team slash command on discord
+//
+
+const { SlashCommandBuilder } = require('discord.js');
+const { createTeam } = require('../../algorithm');
+const { createTeamEmbed, insufficientTeamEmbed, testEmbed } = require('../../components/embed')
+const { emojis, roleOptions, createTeamMessage, createTeamDescription } = require('../../constants');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -59,11 +63,10 @@ module.exports = {
         ),
 
     async execute(interaction) {
-
-        // Retrieve players from command
+        // create list of all players to tag
         const players = [];
         let playerString = "";
-        for (let i = 1; i <= 10; i++){
+        for (let i = 1; i <= 10; i++) {
             const player = interaction.options.getUser(`player${i}`);
             if (player) {
                 players.push(player);
@@ -76,13 +79,17 @@ module.exports = {
             fetchReply: true
         })
 
-        message.react(emojis[0]);
-        message.react(emojis[1]);
-        message.react(emojis[2]);
+        try {
+			message.react(emojis[0]);
+			message.react(emojis[1]);
+			message.react(emojis[2]);
+		} catch (error) {
+			console.error('One of the emojis failed to react:', error);
+		}
 
+        // create reaction collector to view all reactions and 'unreactions' within 30 seconds of the message sent
         const filter = (reaction, user) => emojis.includes(reaction.emoji.name) && players.includes(user);
-        const collector = message.createReactionCollector({ filter, time: 30000 });
-
+        const collector = message.createReactionCollector({ filter, time: 30000,  dispose: true});
         const data = [];
 
         collector.on('collect', (reaction, user) => {
@@ -90,48 +97,50 @@ module.exports = {
 
             const role = roleOptions[emojis.indexOf(reaction.emoji.name)];
             const userTag = `<@${user.id}>`;
-
             const existingPlayerIndex = data.findIndex(player => player.name === userTag);
 
-            if (reaction.users.cache.get(user.id)) {
-                // User reacted - add or update preferences
-                if (existingPlayerIndex !== -1) {
-                    // If the user exists, add the role to their preferences
-                    if (!data[existingPlayerIndex].preferences.includes(role)) {
-                        data[existingPlayerIndex].preferences.push(role);
-                    }
-                } else {
-                    data.push({ name: userTag, preferences: [role] });
+            if (existingPlayerIndex !== -1) {
+                if (!data[existingPlayerIndex].preferences.includes(role)) {
+                    data[existingPlayerIndex].preferences.push(role);
                 }
             } else {
-                // User deselected - remove role from preferences
-                if (existingPlayerIndex !== -1) {
-                    const roleIndex = data[existingPlayerIndex].preferences.indexOf(role);
-                    if (roleIndex !== -1) {
-                        data[existingPlayerIndex].preferences.splice(roleIndex, 1);
-                        // Remove the user from the array if they have no preferences left
-                        if (data[existingPlayerIndex].preferences.length === 0) {
-                            data.splice(existingPlayerIndex, 1);
-                        }
-                    }
-                }
+                data.push({ name: userTag, preferences: [role] });
             }
         });
 
+        collector.on('remove', (reaction, user) => {
+            console.log(`Collected unreaction ${reaction.emoji.name} from user ${user.tag}`);
+            
+            const role = roleOptions[emojis.indexOf(reaction.emoji.name)];
+            const userTag = `<@${user.id}>`;
+            const existingPlayerIndex = data.findIndex(player => player.name === userTag);
+
+            if (existingPlayerIndex !== -1) {
+                const roleIndex = data[existingPlayerIndex].preferences.indexOf(role);
+                if (roleIndex !== -1) {
+                    data[existingPlayerIndex].preferences.splice(roleIndex, 1);
+                    if (data[existingPlayerIndex].preferences.length === 0) {
+                        data.splice(existingPlayerIndex, 1);
+                    }
+                }
+            }
+        })
+
         collector.on('end', () => {
-            // Process collected reactions and selected roles
             console.log(data);
 
-            interaction.followUp('Role selection time is up!');
-
             if (data.length < 10) {
-                const insufficientTeam = insufficientTeamEmbed()
-                interaction.followUp({ embeds: [insufficientTeam] })
+                const insufficientTeam = insufficientTeamEmbed();
+                interaction.followUp({ embeds: [insufficientTeam] });
             } else {
                 const teams = createTeam(data);
                 const embedTeams = createTeamEmbed(teams[0], teams[1]);
-                interaction.followUp({ embeds: [embedTeams] })
+                interaction.followUp({ embeds: [embedTeams] });
             }
+
+            // TEST EMBEDS
+            // const test = testEmbed(data);
+            // interaction.followUp({ embeds: [test] });
         })
     }
 };

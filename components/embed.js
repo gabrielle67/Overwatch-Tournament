@@ -1,3 +1,7 @@
+//
+// all functions that create embeds
+//
+
 const { EmbedBuilder } = require('discord.js');
 
 function createTeamEmbed(teamA, teamB) {
@@ -14,6 +18,7 @@ function createTeamEmbed(teamA, teamB) {
                     { name: '🛡️ Tank', value: teamB[0].name, inline: false},
                     { name: '🔫 DPS', value: `${teamB[1].name}, ${teamB[2].name}`, inline: false},
                     { name: '💉 Support ', value: `${teamB[3].name}, ${teamB[4].name}`, inline: false},
+                    { name: '\u200B', value: '\u200B'}
                 )
                 .setFooter({text: 'stupid bot by Goob'})
     return embedTeams;
@@ -29,5 +34,20 @@ function insufficientTeamEmbed() {
     return embedInsufficient;
 }
 
+function testEmbed(data) {
+    const dataList = [];
+    for (let i = 0; i < data.length; i++) {
+        const vals = data[i].preferences.join(", ");
+        dataList.push({ name: vals, value: data[i].name });
+    }
+    console.log(dataList);
+    return {
+        color: 0x0099ff,
+        title: 'Test',
+        fields: dataList
+    }
+}
+
 exports.createTeamEmbed = createTeamEmbed;
 exports.insufficientTeamEmbed = insufficientTeamEmbed;
+exports.testEmbed = testEmbed;
