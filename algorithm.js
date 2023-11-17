@@ -2,6 +2,8 @@
 // takes a list of ten maps with user preferences and divides them into 2 equal teams
 //
 
+const { exampleData3 } = require('./constants');
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -19,7 +21,6 @@ function createTeam(players) {
 
     shuffleArray(players);
 
-    // Identify players who have selected only one role
     for (const player of players) {
         if (player.preferences.length == 1) {
             const role = player.preferences[0];
@@ -33,12 +34,7 @@ function createTeam(players) {
                 support.push(player);
                 player.role = "Support";
             }
-        }
-    }
-
-    // Place other players in one of the three roles
-    for (const player of players) {
-        if (player.preferences.length > 1) {
+        } else if (player.preferences.length > 1) {
             if (player.preferences.includes("Tank") && tanks.length < 2) {
                 tanks.push(player);
                 player.role = "Tank";
@@ -64,3 +60,7 @@ function createTeam(players) {
 }
 
 exports.createTeam = createTeam;
+
+// const test = createTeam(exampleData3);
+
+// console.log(test);
