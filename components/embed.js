@@ -41,11 +41,11 @@ function soloCountEmbed(tankCount, dpsCount, supportCount) {
     const soloEmbed = new EmbedBuilder()
                 .setColor('Red')
                 .setTitle('Solo Count Warning')
-                .setDescription('Too many players have solo selected the same role:')
+                .setDescription('Too many players have role locked the same role:')
                 .addFields(
-                    { name: 'Solo Tanks:', value: `${tankCount}`, inline: true },
-                    { name: 'Solo DPS:', value: `${dpsCount}`, inline: true },
-                    { name: 'Solo Support:', value: `${supportCount}`, inline: true }
+                    { name: 'Locked Tanks:', value: `${tankCount}`, inline: true },
+                    { name: 'Locked DPS:', value: `${dpsCount}`, inline: true },
+                    { name: 'Locked Support:', value: `${supportCount}`, inline: true }
                 )
     return soloEmbed;
 };

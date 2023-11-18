@@ -2,8 +2,6 @@
 // takes a list of ten maps with user preferences and divides them into 2 equal teams
 //
 
-const { exampleData3 } = require('./constants');
-
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -34,6 +32,7 @@ function createTeam(players) {
                 support.push(player);
                 player.role = "Support";
             }
+
         } else if (player.preferences.length > 1) {
             if (player.preferences.includes("Tank") && tanks.length < 2) {
                 tanks.push(player);
@@ -60,7 +59,3 @@ function createTeam(players) {
 }
 
 exports.createTeam = createTeam;
-
-// const test = createTeam(exampleData3);
-
-// console.log(test);
