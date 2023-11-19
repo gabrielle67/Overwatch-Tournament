@@ -2,7 +2,7 @@
 // all slash commands
 //
 const { SlashCommandBuilder } = require('discord.js');
-const { createTeamDescription } = require('../constants');
+const { createTeamDescription, createMapDescription, gameModeChoices } = require('../constants');
 
 const createTeamCommand = new SlashCommandBuilder()
     .setName('createteam')
@@ -58,4 +58,21 @@ const createTeamCommand = new SlashCommandBuilder()
         .setRequired(true)
     )
 
+const createMapCommand = new SlashCommandBuilder()
+    .setName('map')
+    .setDescription(createMapDescription)
+    .addStringOption(option =>
+        option.setName('mode')
+            .setDescription('Select Game Mode')
+            .setRequired(true)
+            .addChoices(
+                { name: 'Control', value: 'control'},
+                { name: 'Escort', value: 'escort'},
+                { name: 'Flashpoint', value: 'flashpoint'},
+                { name: 'Hybrid', value: 'hybrid'},
+                { name: 'Push', value: 'push'}
+            )
+    )
+
 exports.createTeamCommand = createTeamCommand;
+exports.createMapCommand = createMapCommand;
