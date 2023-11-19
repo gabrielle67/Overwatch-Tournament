@@ -56,7 +56,7 @@ function insufficientTeamEmbed() {
                 .setTitle('Insufficient Number of Players')
                 .addFields({
                     name: '10 Players need to select a role for a team to be created', 
-                    value: 'run /createTeams again', inline: false
+                    value: 'run /createteam again', inline: false
                 })
     return embedInsufficient;
 }

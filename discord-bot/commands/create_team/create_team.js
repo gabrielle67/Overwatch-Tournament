@@ -53,7 +53,6 @@ module.exports = {
         collector.on('end', () => {
             console.log(data);
             // Count reactions for each role
-
             const tankCount = data.filter(player => player.preferences.includes('Tank')).length;
             const dpsCount = data.filter(player => player.preferences.includes('DPS')).length;
             const supportCount = data.filter(player => player.preferences.includes('Support')).length;

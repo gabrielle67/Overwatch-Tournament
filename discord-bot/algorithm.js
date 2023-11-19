@@ -1,8 +1,21 @@
-// 
-// handles all logic for app
-//
+/// 
+/// handles all logic for app
+///
+
 const { mapList } = require('./constants');
 
+// For testing only. Fills an array that doesn't meet size requirements
+function fillArray(array, fillList) {
+    const len = array.length;
+    if ( len != 10 ) {
+        const i = 10 - len;
+        const add = fillList.slice(0, i);
+        return [...array, ...add];
+    }
+    return array;
+}
+
+// Randomizes the order of the players in the list
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -10,6 +23,7 @@ function shuffleArray(array) {
     }
 }
 
+// Selects a random item from a list
 function randomItem(array) {
     if (!Array.isArray(array) || array.length === 0) {
         return null; 
@@ -18,6 +32,7 @@ function randomItem(array) {
     return array[randInd];
 }
 
+// Selects a random map based on the given game mode 
 function selectMap(gameMode){
     let maps;
     switch (gameMode) {
@@ -42,6 +57,7 @@ function selectMap(gameMode){
     return randomItem(maps);
 }
 
+// Creates 2 equal teams of 5 with an equal number of roles
 function createTeam(players) {
     const tanks = [];
     const dps = [];
@@ -93,3 +109,4 @@ function createTeam(players) {
 
 exports.createTeam = createTeam;
 exports.selectMap = selectMap;
+exports.fillArray = fillArray;

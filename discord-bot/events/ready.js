@@ -1,3 +1,7 @@
+///
+/// Inform user when bot is online
+///
+
 const { Events } = require('discord.js');
 
 module.exports = {

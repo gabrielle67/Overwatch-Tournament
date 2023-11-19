@@ -1,3 +1,7 @@
+///
+/// Events that handle bot interactions
+///
+
 const { Events } = require('discord.js');
 
 module.exports = {

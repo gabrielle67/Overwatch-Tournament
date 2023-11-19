@@ -1,8 +1,9 @@
 //
 // all slash commands
 //
+
 const { SlashCommandBuilder } = require('discord.js');
-const { createTeamDescription, createMapDescription, gameModeChoices } = require('../constants');
+const { createTeamDescription, createMapDescription } = require('../constants');
 
 const createTeamCommand = new SlashCommandBuilder()
     .setName('createteam')
