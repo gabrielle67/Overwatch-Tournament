@@ -1,4 +1,6 @@
 
+![Header](assets/OW-Header.png.png)
+
 # OW Team Placement on Discord
 
 Discord Bot that places 10 players into 2 teams of 5 and assigns roles based on role preferences (Tank, DPS, Support) using Discord.js
