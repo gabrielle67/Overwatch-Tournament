@@ -1,5 +1,5 @@
 
-![Header](assets/OW-Header.png.png)
+![Header](assets/OW-Header.png)
 
 # OW Team Placement on Discord
 
