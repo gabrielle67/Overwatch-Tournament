@@ -32,6 +32,7 @@ Create a .env file and add Discord developer secrets
 Deploy slash commands
 
 ```bash
+  cd discord-bot
   node deploy-commands.js
 ```
 
