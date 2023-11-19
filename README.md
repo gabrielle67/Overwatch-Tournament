@@ -1,12 +1,17 @@
 
 ![Header](assets/OW-Header.png)
 
-Discord Bot for custom tournaments in Overwatch 2. Much like the game, it places 10 players into 2 teams of 5 and assigns roles based on given role preferences (Tank, DPS, Support) using Discord.js
+### About
+Discord Bot for custom tournaments in Overwatch 2. Much like the game, it places 10 players into 2 teams of 5 and assigns roles based on given role preferences (Tank, DPS, Support) using Discord.js. Each team has 1 Tank, 2 DPS, and 2 Support.
+
 
 ## Commands
-```/createteam``` takes 10 usernames and responds with the players organized into 2 teams and 3 roles
+|**Slash Command**|**Arg**|**Description**|
+|:---------------:|:-----:|:-------------:|
+| ```/createteam```| 10 Player Usernames | Mentions the 10 users and prompts them to react to the message based on their role preferences. Places the 10 users into one of 2 teams (Alpha or Bravo) and assigns them a role |
+| ```/map``` | Game Mode | Responds with a randomly selected Overwatch map that is associated with the selected game mode |
 
-```/map``` takes 1 of 5 game modes and responds with a Overwatch map
+
 
 ## Run Locally
 
