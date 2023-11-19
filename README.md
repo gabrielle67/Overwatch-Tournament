@@ -1,8 +1,6 @@
 
 ![Header](assets/OW-Header.png)
 
-# OW Team Placement on Discord
-
 Discord Bot for custom tournaments in Overwatch 2. Much like the game, it places 10 players into 2 teams of 5 and assigns roles based on given role preferences (Tank, DPS, Support) using Discord.js.
 
 ## Commands
