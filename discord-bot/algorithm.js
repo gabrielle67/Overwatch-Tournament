@@ -46,7 +46,7 @@ function selectMap(gameMode){
             maps = mapList.hybrid;
             break;
         case 'flashpoint':
-            maps = mapList.hybrid;
+            maps = mapList.flashpoint;
             break;
         case 'push':
             maps = mapList.push;
